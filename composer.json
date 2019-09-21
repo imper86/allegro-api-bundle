@@ -11,11 +11,18 @@
     ],
     "require": {
         "php": "^7.1",
+        "ext-json": "*",
         "symfony/config": "^4.3",
         "symfony/dependency-injection": "^4.3",
         "symfony/http-kernel": "^4.3",
         "symfony/routing": "^4.3",
-        "imper86/allegroapi": "^5.0"
+        "imper86/allegroapi": "^5.0",
+        "doctrine/doctrine-bundle": "^1.11",
+        "doctrine/orm": "^2.6",
+        "sensio/framework-extra-bundle": "^5.4",
+        "symfony/framework-bundle": "^4.3",
+        "symfony/security-bundle": "^4.3",
+        "symfony/event-dispatcher-contracts": "^1.1"
     },
     "autoload": {
         "psr-4": {

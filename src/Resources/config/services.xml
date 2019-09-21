@@ -6,9 +6,9 @@
 
     <services>
         <service id="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory" public="false">
-            <argument />
-            <argument type="service" id="logger" />
-            <argument type="service" id="router" />
+            <argument key="$config" />
+            <argument key="$router" type="service" id="router" />
+            <argument key="$logger" />
         </service>
 
         <service id="Imper86\AllegroRestApiSdk\AllegroAuthInterface" class="Imper86\AllegroRestApiSdk\AllegroAuth" autoconfigure="false">
@@ -18,5 +18,14 @@
         <service id="Imper86\AllegroRestApiSdk\AllegroClientInterface" class="Imper86\AllegroRestApiSdk\AllegroClient" autoconfigure="false">
             <factory service="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory" method="createClient" />
         </service>
+
+        <service id="Imper86\AllegroApiBundle\Controller\AllegroApiController" autoconfigure="true" autowire="true">
+            <tag name="controller.service_arguments" />
+        </service>
+
+        <service id="Imper86\AllegroApiBundle\Repository\AllegroAccountRepository" autoconfigure="true" autowire="true" />
+        <service id="Imper86\AllegroApiBundle\EventSubscriber\AuthCodeHandleSubscriber" autoconfigure="true" autowire="true" />
+        <service id="Imper86\AllegroApiBundle\Service\TokenBundleService" autoconfigure="true" autowire="true" />
+        <service id="Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory" autoconfigure="true" autowire="true" />
     </services>
 </container>

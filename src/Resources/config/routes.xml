@@ -1,0 +1,8 @@
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="allegro_api_start_authorization" path="/allegro-api/start" controller="Imper86\AllegroApiBundle\Controller\AllegroApiController::startAuthorization" methods="GET" />
+    <route id="allegro_api_handle_code" path="/allegro-api/code" controller="Imper86\AllegroApiBundle\Controller\AllegroApiController::handleCode" methods="GET" />
+</routes>

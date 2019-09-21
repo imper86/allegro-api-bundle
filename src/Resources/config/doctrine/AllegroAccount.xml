@@ -1,0 +1,13 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="Imper86\AllegroApiBundle\Entity\AllegroAccount" table="allegro_account" repository-class="Imper86\AllegroApiBundle\Repository\AllegroAccountRepository">
+        <id name="id" type="string" length="255" />
+        <field name="name" type="string" length="255" nullable="true" unique="true" />
+        <field name="userId" type="string" length="255" nullable="true" />
+        <field name="accessToken" type="text" nullable="true" />
+        <field name="refreshToken" type="text" nullable="true" />
+        <field name="soapSessionId" type="string" nullable="true" />
+    </entity>
+</doctrine-mapping>

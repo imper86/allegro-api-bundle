@@ -33,7 +33,7 @@ class AllegroServiceFactory
      */
     private $credentials;
 
-    public function __construct(array $config, RouterInterface $router, LoggerInterface $logger)
+    public function __construct(array $config, RouterInterface $router, ?LoggerInterface $logger = null)
     {
         $this->config = $config;
         $this->router = $router;
