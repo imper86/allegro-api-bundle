@@ -111,6 +111,10 @@ class AuthCodeHandleSubscriber implements EventSubscriberInterface
                 $account->setSoapSessionId($sessionHandle->getSessionHandlePart());
             }
 
+            if ($this->tokenStorage->getToken()) {
+                $account->setUserId($this->tokenStorage->getToken()->getUsername());
+            }
+
             $event->setAllegroAccount($account);
         }
     }
