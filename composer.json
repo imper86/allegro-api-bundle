@@ -1,0 +1,25 @@
+{
+    "name": "imper86/allegro-api-bundle",
+    "description": "Allegro rest/soap api symfony bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "imper",
+            "email": "me@imper.info"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "symfony/config": "^4.3",
+        "symfony/dependency-injection": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "symfony/routing": "^4.3",
+        "imper86/allegroapi": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Imper86\\AllegroApiBundle\\": "src"
+        }
+    }
+}
