@@ -24,15 +24,34 @@ class AllegroSimpleClientFactory
      * @var AllegroClientInterface
      */
     private $allegroClient;
+    /**
+     * @var ClientCredentialsAccountFactory
+     */
+    private $clientCredentialsAccountFactory;
 
-    public function __construct(TokenBundleService $tokenBundleService, AllegroClientInterface $allegroClient)
+    public function __construct(
+        TokenBundleService $tokenBundleService,
+        AllegroClientInterface $allegroClient,
+        ClientCredentialsAccountFactory $clientCredentialsAccountFactory
+    )
     {
         $this->tokenBundleService = $tokenBundleService;
         $this->allegroClient = $allegroClient;
+        $this->clientCredentialsAccountFactory = $clientCredentialsAccountFactory;
     }
 
     public function build(AllegroAccount $account, int $maxRequestRetries = 3): AllegroSimpleClientInterface
     {
         return new AllegroSimpleClient($account, $maxRequestRetries, $this->tokenBundleService, $this->allegroClient);
+    }
+
+    public function buildForClient(int $maxRequestRetries = 3): AllegroSimpleClientInterface
+    {
+        return new AllegroSimpleClient(
+            $this->clientCredentialsAccountFactory->fetchAccount(),
+            $maxRequestRetries,
+            $this->tokenBundleService,
+            $this->allegroClient
+        );
     }
 }

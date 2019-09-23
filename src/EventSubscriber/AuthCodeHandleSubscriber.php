@@ -102,6 +102,7 @@ class AuthCodeHandleSubscriber implements EventSubscriberInterface
 
             $account->setAccessToken((string)$tokenBundle->getAccessToken());
             $account->setRefreshToken((string)$tokenBundle->getRefreshToken());
+            $account->setGrantType($tokenBundle->getGrantType());
 
             $sessionHandle = $this->allegroClient->soapRequest(
                 new DoLoginWithAccessTokenRequest((string)$tokenBundle->getAccessToken(), 1)

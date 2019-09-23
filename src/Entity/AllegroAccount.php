@@ -49,6 +49,11 @@ class AllegroAccount
      * @var string|null
      */
     private $soapSessionId;
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @var string|null
+     */
+    private $grantType;
 
     /**
      * @return string|null
@@ -144,5 +149,21 @@ class AllegroAccount
     public function setSoapSessionId(?string $soapSessionId): void
     {
         $this->soapSessionId = $soapSessionId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGrantType(): ?string
+    {
+        return $this->grantType;
+    }
+
+    /**
+     * @param string|null $grantType
+     */
+    public function setGrantType(?string $grantType): void
+    {
+        $this->grantType = $grantType;
     }
 }

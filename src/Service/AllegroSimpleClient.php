@@ -84,6 +84,8 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
                 return $this->soapRequest($requestObject);
             }
 
+            $this->retryCount = 0;
+
             throw $exception;
         }
     }

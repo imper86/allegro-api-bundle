@@ -54,7 +54,6 @@ class AllegroApiController extends AbstractController
             $event = new AuthCodeEvent($request->query->get('code'));
 
             $this->eventDispatcher->dispatch($event);
-
             $this->entityManager->flush();
 
             return $event->getResponse();

@@ -48,14 +48,17 @@ get and store your token pair.
 
 ### Using client
 To get your client, inject service 
-*Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory*
-and use *build* method to create simple client (AllegroSimpleClientInterface).
+**Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory**
+and use **build** method to create simple client (AllegroSimpleClientInterface).
+
+If you wish to use client credentials grant, skip Authorization part, and
+just use **buildForClient** method in **AllegroSimpleClientFactory**.
 
 Bundle will handle tokens, and soap sessionId's for you, so you can use
-requests with *null* token.
+requests with **null** token.
 
 ### TokenBundleService
-Inject this service to get TokenBundleInterface object, refresh token,
+Inject this service if you need TokenBundleInterface object, refresh token,
 or sessionId.
 
 ## Is that all?
