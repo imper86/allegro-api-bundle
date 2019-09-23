@@ -27,5 +27,6 @@
         <service id="Imper86\AllegroApiBundle\EventSubscriber\AuthCodeHandleSubscriber" autoconfigure="true" autowire="true" />
         <service id="Imper86\AllegroApiBundle\Service\TokenBundleService" autoconfigure="true" autowire="true" />
         <service id="Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory" autoconfigure="true" autowire="true" />
+        <service id="Imper86\AllegroApiBundle\Factory\ClientCredentialsAccountFactory" autoconfigure="true" autowire="true" />
     </services>
 </container>
