@@ -8,6 +8,7 @@
 namespace Imper86\AllegroApiBundle\Factory;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
 use Imper86\AllegroApiBundle\Service\AllegroSimpleClient;
 use Imper86\AllegroApiBundle\Service\AllegroSimpleClientInterface;
@@ -28,6 +29,10 @@ class AllegroSimpleClientFactory
      * @var ClientCredentialsAccountFactory
      */
     private $clientCredentialsAccountFactory;
+    /**
+     * @var AllegroSimpleClientInterface[]
+     */
+    private $instances = [];
 
     public function __construct(
         TokenBundleService $tokenBundleService,
@@ -38,20 +43,24 @@ class AllegroSimpleClientFactory
         $this->tokenBundleService = $tokenBundleService;
         $this->allegroClient = $allegroClient;
         $this->clientCredentialsAccountFactory = $clientCredentialsAccountFactory;
+        $this->instances = new ArrayCollection();
     }
 
     public function build(AllegroAccount $account, int $maxRequestRetries = 3): AllegroSimpleClientInterface
     {
-        return new AllegroSimpleClient($account, $maxRequestRetries, $this->tokenBundleService, $this->allegroClient);
+        $ref = &$this->instances[$account->getId()];
+
+        if (!isset($ref)) {
+            $ref = new AllegroSimpleClient($account, $maxRequestRetries, $this->tokenBundleService, $this->allegroClient);
+        }
+
+        $ref->setMaxRetries($maxRequestRetries);
+
+        return $ref;
     }
 
     public function buildForClient(int $maxRequestRetries = 3): AllegroSimpleClientInterface
     {
-        return new AllegroSimpleClient(
-            $this->clientCredentialsAccountFactory->fetchAccount(),
-            $maxRequestRetries,
-            $this->tokenBundleService,
-            $this->allegroClient
-        );
+        return $this->build($this->clientCredentialsAccountFactory->fetchAccount(), $maxRequestRetries);
     }
 }

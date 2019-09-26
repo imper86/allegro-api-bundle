@@ -89,4 +89,20 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
             throw $exception;
         }
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxRetries(): int
+    {
+        return $this->maxRetries;
+    }
+
+    /**
+     * @param int $maxRetries
+     */
+    public function setMaxRetries(int $maxRetries): void
+    {
+        $this->maxRetries = $maxRetries;
+    }
 }
