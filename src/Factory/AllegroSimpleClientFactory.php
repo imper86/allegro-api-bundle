@@ -8,7 +8,6 @@
 namespace Imper86\AllegroApiBundle\Factory;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
 use Imper86\AllegroApiBundle\Service\AllegroSimpleClient;
 use Imper86\AllegroApiBundle\Service\AllegroSimpleClientInterface;
@@ -43,7 +42,6 @@ class AllegroSimpleClientFactory
         $this->tokenBundleService = $tokenBundleService;
         $this->allegroClient = $allegroClient;
         $this->clientCredentialsAccountFactory = $clientCredentialsAccountFactory;
-        $this->instances = new ArrayCollection();
     }
 
     public function build(AllegroAccount $account, int $maxRequestRetries = 3): AllegroSimpleClientInterface
