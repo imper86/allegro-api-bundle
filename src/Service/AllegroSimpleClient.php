@@ -9,6 +9,8 @@ namespace Imper86\AllegroApiBundle\Service;
 
 
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
+use Imper86\AllegroApiBundle\Model\Response;
+use Imper86\AllegroApiBundle\Model\ResponseInterface;
 use Imper86\AllegroRestApiSdk\AllegroClientInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -48,7 +50,7 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
         $this->maxRetries = $maxRetries;
     }
 
-    public function restRequest(RequestInterface $request): ?array
+    public function restRequest(RequestInterface $request): ResponseInterface
     {
         $tokenBundle = $this->tokenBundleService->fetchBundle($this->account);
         $request = $request->withHeader('Authorization', "Bearer {$tokenBundle->getAccessToken()}");
@@ -63,7 +65,7 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
 
         $this->retryCount = 0;
 
-        return json_decode((string)$response->getBody(), true);
+        return new Response($response);
     }
 
     public function soapRequest($requestObject)
