@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright: IMPER.INFO Adrian Szuszkiewicz
+ * Author: Adrian Szuszkiewicz <me@imper.info>
+ * Github: https://github.com/imper86
  * Date: 21.09.2019
  * Time: 17:16
  */
@@ -9,8 +10,7 @@ namespace Imper86\AllegroApiBundle\Factory;
 
 
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
-use Imper86\AllegroApiBundle\Service\AllegroSimpleClient;
-use Imper86\AllegroApiBundle\Service\AllegroSimpleClientInterface;
+use Imper86\AllegroApiBundle\Service\AllegroClient;
 use Imper86\AllegroApiBundle\Service\TokenBundleService;
 use Imper86\AllegroRestApiSdk\AllegroClientInterface;
 
@@ -29,7 +29,7 @@ class AllegroSimpleClientFactory
      */
     private $clientCredentialsAccountFactory;
     /**
-     * @var AllegroSimpleClientInterface[]
+     * @var AllegroClientInterface[]
      */
     private $instances = [];
 
@@ -44,12 +44,12 @@ class AllegroSimpleClientFactory
         $this->clientCredentialsAccountFactory = $clientCredentialsAccountFactory;
     }
 
-    public function build(AllegroAccount $account, int $maxRequestRetries = 3): AllegroSimpleClientInterface
+    public function build(AllegroAccount $account, int $maxRequestRetries = 3): AllegroClientInterface
     {
         $ref = &$this->instances[$account->getId()];
 
         if (!isset($ref)) {
-            $ref = new AllegroSimpleClient($account, $maxRequestRetries, $this->tokenBundleService, $this->allegroClient);
+            $ref = new AllegroClient($account, $maxRequestRetries, $this->tokenBundleService, $this->allegroClient);
         }
 
         $ref->setMaxRetries($maxRequestRetries);
@@ -57,7 +57,7 @@ class AllegroSimpleClientFactory
         return $ref;
     }
 
-    public function buildForClient(int $maxRequestRetries = 3): AllegroSimpleClientInterface
+    public function buildForClient(int $maxRequestRetries = 3): AllegroClientInterface
     {
         return $this->build($this->clientCredentialsAccountFactory->fetchAccount(), $maxRequestRetries);
     }

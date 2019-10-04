@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright: IMPER.INFO Adrian Szuszkiewicz
+ * Author: Adrian Szuszkiewicz <me@imper.info>
+ * Github: https://github.com/imper86
  * Date: 21.09.2019
  * Time: 14:18
  */

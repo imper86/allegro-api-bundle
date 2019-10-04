@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright: IMPER.INFO Adrian Szuszkiewicz
+ * Author: Adrian Szuszkiewicz <me@imper.info>
+ * Github: https://github.com/imper86
  * Date: 21.09.2019
  * Time: 14:14
  */
@@ -21,7 +22,7 @@ use Imper86\AllegroApiBundle\Entity\AllegroAccount;
  * @method AllegroAccount[] findAll()
  * @method AllegroAccount[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AllegroAccountRepository extends ServiceEntityRepository
+class AllegroAccountRepository extends ServiceEntityRepository implements AllegroAccountRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright: IMPER.INFO Adrian Szuszkiewicz
+ * Author: Adrian Szuszkiewicz <me@imper.info>
+ * Github: https://github.com/imper86
  * Date: 21.09.2019
  * Time: 17:05
  */
@@ -11,10 +12,10 @@ namespace Imper86\AllegroApiBundle\Service;
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
 use Imper86\AllegroApiBundle\Model\Response;
 use Imper86\AllegroApiBundle\Model\ResponseInterface;
-use Imper86\AllegroRestApiSdk\AllegroClientInterface;
+use Imper86\AllegroRestApiSdk\AllegroClientInterface as BaseAllegroClientInterface;
 use Psr\Http\Message\RequestInterface;
 
-class AllegroSimpleClient implements AllegroSimpleClientInterface
+class AllegroClient implements AllegroClientInterface
 {
     /**
      * @var AllegroAccount
@@ -25,7 +26,7 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
      */
     private $tokenBundleService;
     /**
-     * @var AllegroClientInterface
+     * @var BaseAllegroClientInterface
      */
     private $allegroClient;
     /**
@@ -41,7 +42,7 @@ class AllegroSimpleClient implements AllegroSimpleClientInterface
         AllegroAccount $account,
         int $maxRetries,
         TokenBundleService $tokenBundleService,
-        AllegroClientInterface $allegroClient
+        BaseAllegroClientInterface $allegroClient
     )
     {
         $this->account = $account;

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright: IMPER.INFO Adrian Szuszkiewicz
+ * Author: Adrian Szuszkiewicz <me@imper.info>
+ * Github: https://github.com/imper86
  * Date: 21.09.2019
  * Time: 14:05
  */
@@ -8,67 +9,73 @@
 namespace Imper86\AllegroApiBundle\Entity;
 
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Class AllegroAccount
  * @package Imper86\AllegroApiBundle\Entity
- *
- * @ORM\Entity(repositoryClass="Imper86\AllegroApiBundle\Repository\AllegroAccountRepository")
  */
-class AllegroAccount
+class AllegroAccount implements AllegroAccountInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\Column(type="string", unique=true, nullable=false)
-     * @var string|null
+     * @var string
      */
     private $id;
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
+     * @var string
+     */
+    private $grantType;
+    /**
      * @var string|null
      */
     private $name;
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @var string|null
-     */
-    private $userId;
-    /**
-     * @ORM\Column(type="text", nullable=true)
      * @var string|null
      */
     private $accessToken;
     /**
-     * @ORM\Column(type="text", nullable=true)
      * @var string|null
      */
     private $refreshToken;
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $soapSessionId;
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     * @var string|null
-     */
-    private $grantType;
+
+    public function __construct(string $id, string $grantType)
+    {
+        $this->id = $id;
+        $this->grantType = $grantType;
+    }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param string|null $id
+     * @param string $id
      */
-    public function setId(?string $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrantType(): string
+    {
+        return $this->grantType;
+    }
+
+    /**
+     * @param string $grantType
+     */
+    public function setGrantType(string $grantType): void
+    {
+        $this->grantType = $grantType;
     }
 
     /**
@@ -85,22 +92,6 @@ class AllegroAccount
     public function setName(?string $name): void
     {
         $this->name = $name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUserId(): ?string
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param string|null $userId
-     */
-    public function setUserId(?string $userId): void
-    {
-        $this->userId = $userId;
     }
 
     /**
@@ -149,21 +140,5 @@ class AllegroAccount
     public function setSoapSessionId(?string $soapSessionId): void
     {
         $this->soapSessionId = $soapSessionId;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getGrantType(): ?string
-    {
-        return $this->grantType;
-    }
-
-    /**
-     * @param string|null $grantType
-     */
-    public function setGrantType(?string $grantType): void
-    {
-        $this->grantType = $grantType;
     }
 }
