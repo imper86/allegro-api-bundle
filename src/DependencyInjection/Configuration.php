@@ -17,7 +17,12 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('imper86_allegro_api');
-        $rootNode = $treeBuilder->getRootNode();
+
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $rootNode = $treeBuilder->root('imper86_allegro_api');
+        }
 
         $rootNode
             ->addDefaultsIfNotSet()

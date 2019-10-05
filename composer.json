@@ -12,15 +12,15 @@
     "require": {
         "php": "^7.1",
         "ext-json": "*",
-        "symfony/config": "^4.3",
-        "symfony/dependency-injection": "^4.3",
-        "symfony/http-kernel": "^4.3",
-        "symfony/routing": "^4.3",
+        "symfony/config": "^3.4 || ^4.0",
+        "symfony/dependency-injection": "^3.4 || ^4.0",
+        "symfony/http-kernel": "^3.4 || ^4.0",
+        "symfony/routing": "^3.4 || ^4.0",
         "imper86/allegroapi": "^5.1",
         "doctrine/doctrine-bundle": "^1.11",
         "doctrine/orm": "^2.6",
         "sensio/framework-extra-bundle": "^5.4",
-        "symfony/framework-bundle": "^4.3",
+        "symfony/framework-bundle": "^3.4 || ^4.0",
         "symfony/event-dispatcher-contracts": "^1.1"
     },
     "autoload": {
