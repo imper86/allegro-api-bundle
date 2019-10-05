@@ -16,6 +16,12 @@ imper86_allegro_api:
     #budle's default is "logger". You can put null here, or your logger service
     logger_service_id: yourlogger
 
+    #you can define how many times client will try to execute request on failure
+    client_default_max_retries: 3
+
+    #your entity manager service
+    entity_manager: default
+
     #this route is built in bundle. you can use your own if you want
     redirect_route: allegro_api_handle_code
 ```
