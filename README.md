@@ -66,5 +66,5 @@ This bundle is on very early stage, so please expect many updates
 in future, because I know that many things in here should be done better.
 
 ## Maintenance
-Currently maintained version is v2.
-If you use v1 you won't receive any bundle updates.
+Currently maintained version is v3.
+If you use v1 or v2 you won't receive any bundle updates.
