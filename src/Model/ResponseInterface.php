@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface as BaseResponseInterface;
 
 interface ResponseInterface extends BaseResponseInterface
 {
-    public function getBodyRaw(): ?string;
+    public function getRawBody(): ?string;
 
-    public function getBodyDecoded(): ?array;
+    public function toArray(): ?array;
 }

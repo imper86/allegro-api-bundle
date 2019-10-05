@@ -28,6 +28,10 @@ class AllegroAccountManager implements AllegroAccountManagerInterface
      * @var AllegroAccountFactoryInterface
      */
     private $factory;
+    /**
+     * @var AllegroAccountInterface[]
+     */
+    private $accounts = [];
 
     /**
      * @param AllegroAccountRepositoryInterface $repository
@@ -45,9 +49,15 @@ class AllegroAccountManager implements AllegroAccountManagerInterface
      */
     public function get(string $accountId): ?AllegroAccountInterface
     {
-        $account = $this->repository->find($accountId);
+        $ref = &$this->accounts[$accountId];
 
-        return $account ?? $this->factory->generate($accountId, GrantType::CLIENT_CREDENTIALS);
+        if (!isset($ref)) {
+            $account = $this->repository->findById($accountId);
+
+            $ref = $account ?? $this->factory->generate($accountId, GrantType::CLIENT_CREDENTIALS);
+        }
+
+        return $ref;
     }
 
 }

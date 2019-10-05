@@ -14,5 +14,5 @@ use Imper86\AllegroApiBundle\Service\AllegroClientInterface;
 
 interface AllegroClientManagerInterface
 {
-    public function get(AllegroAccountInterface $account): AllegroClientInterface;
+    public function get(?AllegroAccountInterface $account = null): AllegroClientInterface;
 }

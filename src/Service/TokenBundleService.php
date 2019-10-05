@@ -10,16 +10,16 @@ namespace Imper86\AllegroApiBundle\Service;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Imper86\AllegroApiBundle\Entity\AllegroAccount;
+use Imper86\AllegroApiBundle\Entity\AllegroAccountInterface;
 use Imper86\AllegroApiBundle\Factory\ClientCredentialsAccountFactory;
-use Imper86\AllegroApiBundle\Repository\AllegroAccountRepository;
+use Imper86\AllegroApiBundle\Manager\AllegroAccountManagerInterface;
 use Imper86\AllegroRestApiSdk\AllegroAuthInterface;
 use Imper86\AllegroRestApiSdk\Constants\GrantType;
 use Imper86\AllegroRestApiSdk\Helper\TokenBundleFactory;
 use Imper86\AllegroRestApiSdk\Model\Auth\TokenBundleInterface;
 use Imper86\AllegroRestApiSdk\Model\SoapWsdl\doLoginWithAccessTokenResponse;
 
-class TokenBundleService
+class TokenBundleService implements TokenBundleServiceInterface
 {
     /**
      * @var AllegroAuthInterface
@@ -30,29 +30,33 @@ class TokenBundleService
      */
     private $entityManager;
     /**
-     * @var AllegroAccountRepository
+     * @var AllegroAccountManagerInterface
      */
-    private $accountRepository;
-    /**
-     * @var ClientCredentialsAccountFactory
-     */
-    private $clientCredentialsAccountFactory;
+    private $accountManager;
 
     public function __construct(
         AllegroAuthInterface $allegroAuth,
         EntityManagerInterface $entityManager,
-        AllegroAccountRepository $accountRepository,
-        ClientCredentialsAccountFactory $clientCredentialsAccountFactory
+        AllegroAccountManagerInterface $accountManager
     )
     {
         $this->allegroAuth = $allegroAuth;
         $this->entityManager = $entityManager;
-        $this->accountRepository = $accountRepository;
-        $this->clientCredentialsAccountFactory = $clientCredentialsAccountFactory;
+        $this->accountManager = $accountManager;
     }
 
-    public function fetchBundle(AllegroAccount $account, bool $autoRefresh = true): TokenBundleInterface
+    public function fetchBundle(AllegroAccountInterface $account, bool $autoRefresh = true): TokenBundleInterface
     {
+        if (!$account->getAccessToken()) {
+            if (GrantType::CLIENT_CREDENTIALS === $account->getGrantType()) {
+                $this->fetchClientCredentialsBundle($account);
+            } else {
+                throw new \InvalidArgumentException(
+                    "Account {$account->getId()} has no access token and is not client_credentials type"
+                );
+            }
+        }
+
         $tokenBundle = TokenBundleFactory::buildFromJwtString(
             $account->getAccessToken(),
             $account->getRefreshToken(),
@@ -79,55 +83,69 @@ class TokenBundleService
         }
     }
 
-    public function refreshUserBundle(TokenBundleInterface $tokenBundle): TokenBundleInterface
-    {
-        if (!in_array($tokenBundle->getGrantType(), [GrantType::AUTHORIZATION_CODE, GrantType::REFRESH_TOKEN])) {
-            throw new \InvalidArgumentException("Invalid grant type for method: {$tokenBundle->getGrantType()}");
-        }
-
-        $account = $this->accountRepository->find($tokenBundle->getUserId());
-
-        if (!$account) {
-            throw new \InvalidArgumentException("Account not found: {$tokenBundle->getUserId()}");
-        }
-
-        $newBundle = $this->allegroAuth->fetchTokenFromRefresh($tokenBundle->getRefreshToken());
-        $account->setAccessToken((string)$newBundle->getAccessToken());
-        $account->setRefreshToken((string)$newBundle->getRefreshToken());
-
-        $this->entityManager->flush();
-
-        return $newBundle;
-    }
-
-    public function refreshClientBundle(TokenBundleInterface $tokenBundle): TokenBundleInterface
-    {
-        if (GrantType::CLIENT_CREDENTIALS !== $tokenBundle->getGrantType()) {
-            throw new \InvalidArgumentException("Invalid grant type for method: {$tokenBundle->getGrantType()}");
-        }
-
-        $account = $this->clientCredentialsAccountFactory->fetchAccount();
-        $newBundle = $this->allegroAuth->fetchTokenFromClientCredentials();
-
-        $account->setAccessToken((string)$newBundle->getAccessToken());
-        $account->setGrantType($newBundle->getGrantType());
-
-        $this->entityManager->flush();
-
-        return $newBundle;
-    }
-
-    public function refreshSessionId(AllegroAccount $account): ?string
+    public function fetchSoapSessionId(AllegroAccountInterface $account): ?string
     {
         $sessionId = $this->allegroAuth->fetchSoapSessionId($account->getAccessToken());
 
         if ($sessionId instanceof doLoginWithAccessTokenResponse) {
             $account->setSoapSessionId($sessionId->getSessionHandlePart());
+
+            $this->entityManager->persist($account);
             $this->entityManager->flush();
 
             return $account->getSoapSessionId();
         }
 
         return null;
+    }
+
+    private function refreshUserBundle(TokenBundleInterface $tokenBundle): TokenBundleInterface
+    {
+        if (!in_array($tokenBundle->getGrantType(), [GrantType::AUTHORIZATION_CODE, GrantType::REFRESH_TOKEN])) {
+            throw new \InvalidArgumentException("Invalid grant type for method: {$tokenBundle->getGrantType()}");
+        }
+
+        $account = $this->accountManager->get($tokenBundle->getUserId());
+
+        if (!$account->getRefreshToken()) {
+            throw new \InvalidArgumentException("Account {$account->getId()} has no refresh token");
+        }
+
+        $newBundle = $this->allegroAuth->fetchTokenFromRefresh($tokenBundle->getRefreshToken());
+        $account->setAccessToken((string)$newBundle->getAccessToken());
+        $account->setRefreshToken((string)$newBundle->getRefreshToken());
+
+        $this->entityManager->persist($account);
+        $this->entityManager->flush();
+
+        return $newBundle;
+    }
+
+    private function refreshClientBundle(TokenBundleInterface $tokenBundle): TokenBundleInterface
+    {
+        if (GrantType::CLIENT_CREDENTIALS !== $tokenBundle->getGrantType()) {
+            throw new \InvalidArgumentException("Invalid grant type for method: {$tokenBundle->getGrantType()}");
+        }
+
+        $account = $this->accountManager->get('client');
+
+        return $this->fetchClientCredentialsBundle($account);
+    }
+
+    private function fetchClientCredentialsBundle(AllegroAccountInterface $account): TokenBundleInterface
+    {
+        if (GrantType::CLIENT_CREDENTIALS !== $account->getGrantType()) {
+            throw new \InvalidArgumentException("Invalid grant type for requested method: {$account->getGrantType()}");
+        }
+
+        $newBundle = $this->allegroAuth->fetchTokenFromClientCredentials();
+
+        $account->setAccessToken((string)$newBundle->getAccessToken());
+        $account->setGrantType($newBundle->getGrantType());
+
+        $this->entityManager->persist($account);
+        $this->entityManager->flush();
+
+        return $newBundle;
     }
 }

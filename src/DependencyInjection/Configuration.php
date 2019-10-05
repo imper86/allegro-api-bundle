@@ -27,6 +27,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('logger_service_id')->defaultValue('logger')->end()
                 ->scalarNode('redirect_route')->defaultValue('allegro_api_handle_code')->end()
                 ->booleanNode('sandbox')->defaultValue(true)->end()
+                ->integerNode('client_default_max_retries')->defaultValue(3)->end()
+                ->scalarNode('entity_manager')->defaultValue('default')->end()
             ->end();
 
         return $treeBuilder;

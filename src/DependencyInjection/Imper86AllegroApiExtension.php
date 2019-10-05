@@ -9,7 +9,8 @@
 namespace Imper86\AllegroApiBundle\DependencyInjection;
 
 
-use Imper86\AllegroApiBundle\Factory\AllegroServiceFactory;
+use Imper86\AllegroApiBundle\Factory\AllegroServiceFactoryInterface;
+use Imper86\AllegroApiBundle\Manager\AllegroClientManagerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -26,13 +27,16 @@ class Imper86AllegroApiExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('imper86.allegro_api.entity_manager', $config['entity_manager']);
+        $container->setParameter('imper86.allegro_api.doctrine', true);
+
         $loggerService = $config['logger_service_id'] ? new Reference($config['logger_service_id']) : null;
 
-        $definition = $container->getDefinition(AllegroServiceFactory::class);
+        $definition = $container->getDefinition(AllegroServiceFactoryInterface::class);
         $definition->setArgument(0, $config);
         $definition->setArgument(2, $loggerService);
 
-        $container->setParameter('imper86.allegro_api.entity_manager', 'default');
-        $container->setParameter('imper86.allegro_api.doctrine', true);
+        $definition = $container->getDefinition(AllegroClientManagerInterface::class);
+        $definition->setArgument(0, $config);
     }
 }

@@ -25,14 +25,14 @@ class Response extends BaseResponse implements ResponseInterface
         );
     }
 
-    public function getBodyRaw(): ?string
+    public function getRawBody(): ?string
     {
         return (string)$this->getBody();
     }
 
-    public function getBodyDecoded(): ?array
+    public function toArray(): ?array
     {
-        return json_decode($this->getBodyRaw(), true);
+        return json_decode($this->getRawBody(), true);
     }
 
 }

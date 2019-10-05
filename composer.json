@@ -21,7 +21,6 @@
         "doctrine/orm": "^2.6",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/framework-bundle": "^4.3",
-        "symfony/security-bundle": "^4.3",
         "symfony/event-dispatcher-contracts": "^1.1"
     },
     "autoload": {

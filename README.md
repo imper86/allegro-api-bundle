@@ -12,7 +12,11 @@ imper86_allegro_api:
     sandbox: true
     client_id: '%env(ALLEGRO_CLIENT_ID)%'
     client_secret: '%env(ALLEGRO_CLIENT_SECRET)%'
+    
+    #budle's default is "logger". You can put null here, or your logger service
     logger_service_id: yourlogger
+
+    #this route is built in bundle. you can use your own if you want
     redirect_route: allegro_api_handle_code
 ```
 
@@ -46,25 +50,34 @@ After that you'll come back to redirect_route specified in config.
 If you leave default value, bundle will handle response, and will
 get and store your token pair.
 
+If you want to modify the response of AllegroApiController::handleCode
+please write subscriber/listener for 
+[Imper86\AllegroApiBundle\Event\AuthCodeEvent](src/Event/AuthCodeEvent.php)
+
 ### Using client
 To get your client, inject service 
-**Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory**
-and use **build** method to create simple client (AllegroSimpleClientInterface).
+[AllegroClientManagerInterface](src/Manager/AllegroClientManagerInterface.php)
+and use **build** method to create api client 
+([AllegroClientInterface](src/Service/AllegroClientInterface.php)).
 
 If you wish to use client credentials grant, skip Authorization part, and
-just use **buildForClient** method in **AllegroSimpleClientFactory**.
+just use **build** method with *null* parameter instead of AllegroAccount 
+object.
 
 Bundle will handle tokens, and soap sessionId's for you, so you can use
-requests with **null** token.
+requests without (**null**) token.
 
-### TokenBundleService
-Inject this service if you need TokenBundleInterface object, refresh token,
-or sessionId.
+### TokenBundleServiceInterface
+Inject [this](src/Service/TokenBundleServiceInterface.php) service if you 
+need *TokenBundleInterface* object, refresh token, or sessionId.
 
 ## Is that all?
 This bundle is on very early stage, so please expect many updates
 in future, because I know that many things in here should be done better.
 
 ## Maintenance
-Currently maintained version is v2.
-If you use v1 you won't receive any bundle updates.
+Currently maintained version is v3.
+If you use v1 or v2 you won't receive any bundle updates.
+
+## Contributing
+Any help will be very appreciated :)

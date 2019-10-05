@@ -12,6 +12,7 @@ namespace Imper86\AllegroApiBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
+use Imper86\AllegroApiBundle\Entity\AllegroAccountInterface;
 
 /**
  * Class AllegroAccountRepository
@@ -27,5 +28,10 @@ class AllegroAccountRepository extends ServiceEntityRepository implements Allegr
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AllegroAccount::class);
+    }
+
+    public function findById(string $id): ?AllegroAccountInterface
+    {
+        return $this->find($id);
     }
 }

@@ -9,7 +9,7 @@
 namespace Imper86\AllegroApiBundle\Event;
 
 
-use Imper86\AllegroApiBundle\Entity\AllegroAccount;
+use Imper86\AllegroApiBundle\Entity\AllegroAccountInterface;
 use Imper86\AllegroRestApiSdk\Model\Auth\TokenBundleInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -25,7 +25,7 @@ class AuthCodeEvent extends Event
      */
     private $tokenBundle;
     /**
-     * @var AllegroAccount|null
+     * @var AllegroAccountInterface|null
      */
     private $allegroAccount;
     /**
@@ -63,17 +63,17 @@ class AuthCodeEvent extends Event
     }
 
     /**
-     * @return AllegroAccount|null
+     * @return AllegroAccountInterface|null
      */
-    public function getAllegroAccount(): ?AllegroAccount
+    public function getAllegroAccount(): ?AllegroAccountInterface
     {
         return $this->allegroAccount;
     }
 
     /**
-     * @param AllegroAccount|null $allegroAccount
+     * @param AllegroAccountInterface|null $allegroAccount
      */
-    public function setAllegroAccount(?AllegroAccount $allegroAccount): void
+    public function setAllegroAccount(?AllegroAccountInterface $allegroAccount): void
     {
         $this->allegroAccount = $allegroAccount;
     }

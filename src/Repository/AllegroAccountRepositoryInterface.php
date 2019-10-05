@@ -11,7 +11,15 @@ namespace Imper86\AllegroApiBundle\Repository;
 
 use Imper86\AllegroApiBundle\Entity\AllegroAccountInterface;
 
+/**
+ * Interface AllegroAccountRepositoryInterface
+ * @package Imper86\AllegroApiBundle\Repository
+ */
 interface AllegroAccountRepositoryInterface
 {
-    public function find($id): ?AllegroAccountInterface;
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function findById(string $id): ?AllegroAccountInterface;
 }

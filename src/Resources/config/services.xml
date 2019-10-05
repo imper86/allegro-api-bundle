@@ -1,32 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services
-        http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory" public="false">
+        <service id="Imper86\AllegroApiBundle\Controller\AllegroApiController"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false">
+            <tag name="controller.service_arguments" />
+        </service>
+
+        <service id="Imper86\AllegroApiBundle\EventSubscriber\AuthCodeSubscriber"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroApiBundle\Factory\AllegroAccountFactoryInterface"
+                 class="Imper86\AllegroApiBundle\Factory\AllegroAccountFactory"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroApiBundle\Factory\AllegroServiceFactoryInterface"
+                 class="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory"
+                 public="false"
+                 autoconfigure="false"
+                 autowire="false">
             <argument key="$config" />
             <argument key="$router" type="service" id="router" />
             <argument key="$logger" />
         </service>
 
-        <service id="Imper86\AllegroRestApiSdk\AllegroAuthInterface" class="Imper86\AllegroRestApiSdk\AllegroAuth" autoconfigure="false">
-            <factory service="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory" method="createAuth" />
+        <service id="Imper86\AllegroApiBundle\Manager\AllegroAccountManagerInterface"
+                 class="Imper86\AllegroApiBundle\Manager\AllegroAccountManager"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroApiBundle\Manager\AllegroClientManagerInterface"
+                 class="Imper86\AllegroApiBundle\Manager\AllegroClientManager"
+                 autoconfigure="false"
+                 autowire="false"
+                 public="false">
+            <argument key="$config" />
+            <argument key="$tokenBundleService"
+                      type="service"
+                      id="Imper86\AllegroApiBundle\Service\TokenBundleServiceInterface" />
+            <argument key="$accountManager"
+                      type="service"
+                      id="Imper86\AllegroApiBundle\Manager\AllegroAccountManagerInterface" />
+            <argument key="$baseAllegroClient"
+                      type="service"
+                      id="Imper86\AllegroRestApiSdk\AllegroClientInterface" />
         </service>
 
-        <service id="Imper86\AllegroRestApiSdk\AllegroClientInterface" class="Imper86\AllegroRestApiSdk\AllegroClient" autoconfigure="false">
-            <factory service="Imper86\AllegroApiBundle\Factory\AllegroServiceFactory" method="createClient" />
+        <service id="Imper86\AllegroApiBundle\Repository\AllegroAccountRepositoryInterface"
+                 class="Imper86\AllegroApiBundle\Repository\AllegroAccountRepository"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroApiBundle\Service\TokenBundleServiceInterface"
+                 class="Imper86\AllegroApiBundle\Service\TokenBundleService"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroApiBundle\Service\UserLoginFetchServiceInterface"
+                 class="Imper86\AllegroApiBundle\Service\UserLoginFetchService"
+                 autoconfigure="true"
+                 autowire="true"
+                 public="false" />
+
+        <service id="Imper86\AllegroRestApiSdk\AllegroAuthInterface"
+                 class="Imper86\AllegroRestApiSdk\AllegroAuth"
+                 autoconfigure="false">
+            <factory service="Imper86\AllegroApiBundle\Factory\AllegroServiceFactoryInterface" method="createAuth" />
         </service>
 
-        <service id="Imper86\AllegroApiBundle\Controller\AllegroApiController" autoconfigure="true" autowire="true">
-            <tag name="controller.service_arguments" />
+        <service id="Imper86\AllegroRestApiSdk\AllegroClientInterface"
+                 class="Imper86\AllegroRestApiSdk\AllegroClient"
+                 autoconfigure="false">
+            <factory service="Imper86\AllegroApiBundle\Factory\AllegroServiceFactoryInterface" method="createClient" />
         </service>
-
-        <service id="Imper86\AllegroApiBundle\Repository\AllegroAccountRepository" autoconfigure="true" autowire="true" />
-        <service id="Imper86\AllegroApiBundle\EventSubscriber\AuthCodeHandleSubscriber" autoconfigure="true" autowire="true" />
-        <service id="Imper86\AllegroApiBundle\Service\TokenBundleService" autoconfigure="true" autowire="true" />
-        <service id="Imper86\AllegroApiBundle\Factory\AllegroSimpleClientFactory" autoconfigure="true" autowire="true" />
-        <service id="Imper86\AllegroApiBundle\Factory\ClientCredentialsAccountFactory" autoconfigure="true" autowire="true" />
     </services>
 </container>

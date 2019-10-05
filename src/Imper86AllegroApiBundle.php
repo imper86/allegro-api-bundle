@@ -20,14 +20,25 @@ class Imper86AllegroApiBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(
-            DoctrineOrmMappingsPass::createAnnotationMappingDriver(
-                ['Imper86\AllegroApiBundle\Entity'],
-                [realpath(__DIR__ . '/Entity')],
+            DoctrineOrmMappingsPass::createXmlMappingDriver(
+                [
+                    realpath(__DIR__ . '/Resources/config/doctrine/mapping') => 'Imper86\AllegroApiBundle\Entity'
+                ],
                 ['imper86.allegro_api.entity_manager'],
                 'imper86.allegro_api.doctrine',
                 ['Imper86AllegroApiBundle' => 'Imper86\AllegroApiBundle\Entity']
             )
         );
+
+//        $container->addCompilerPass(
+//            DoctrineOrmMappingsPass::createAnnotationMappingDriver(
+//                ['Imper86\AllegroApiBundle\Entity'],
+//                [realpath(__DIR__ . '/Entity')],
+//                ['imper86.allegro_api.entity_manager'],
+//                'imper86.allegro_api.doctrine',
+//                ['Imper86AllegroApiBundle' => 'Imper86\AllegroApiBundle\Entity']
+//            )
+//        );
     }
 
 }

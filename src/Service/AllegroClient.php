@@ -10,6 +10,7 @@ namespace Imper86\AllegroApiBundle\Service;
 
 
 use Imper86\AllegroApiBundle\Entity\AllegroAccount;
+use Imper86\AllegroApiBundle\Entity\AllegroAccountInterface;
 use Imper86\AllegroApiBundle\Model\Response;
 use Imper86\AllegroApiBundle\Model\ResponseInterface;
 use Imper86\AllegroRestApiSdk\AllegroClientInterface as BaseAllegroClientInterface;
@@ -39,9 +40,9 @@ class AllegroClient implements AllegroClientInterface
     private $maxRetries;
 
     public function __construct(
-        AllegroAccount $account,
+        AllegroAccountInterface $account,
         int $maxRetries,
-        TokenBundleService $tokenBundleService,
+        TokenBundleServiceInterface $tokenBundleService,
         BaseAllegroClientInterface $allegroClient
     )
     {
@@ -81,7 +82,7 @@ class AllegroClient implements AllegroClientInterface
                 $this->retryCount < $this->maxRetries &&
                 in_array($exception->faultcode, ['ERR_NO_SESSION', 'ERR_SESSION_EXPIRED'])
             ) {
-                $this->tokenBundleService->refreshSessionId($this->account);
+                $this->tokenBundleService->fetchSoapSessionId($this->account);
                 $this->retryCount++;
 
                 return $this->soapRequest($requestObject);
